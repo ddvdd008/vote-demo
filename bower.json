@@ -1,0 +1,23 @@
+{
+  "name": "vote",
+  "description": "",
+  "main": "gulpfile.js",
+  "authors": [
+    "yujiyang"
+  ],
+  "license": "ISC",
+  "moduleType": [],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "bourbon": "~4.2.6",
+    "normalize-css": "~3.0.3",
+    "jquery": "~2.2.0"
+  }
+}
