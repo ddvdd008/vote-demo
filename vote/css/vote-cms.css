@@ -1,0 +1,35 @@
+.view-cms {
+  width: 990px;
+  margin: 0 auto; }
+  .view-cms .head {
+    font-size: 20px;
+    margin: 50px 0;
+    text-align: center; }
+  .view-cms .cont {
+    padding-bottom: 50px; }
+    .view-cms .cont .indexImage img {
+      display: none; }
+    .view-cms .cont .vote_info {
+      display: inline-block;
+      width: 320px;
+      height: 320px;
+      vertical-align: top; }
+    .view-cms .cont .add {
+      width: 100px;
+      margin: 0 auto; }
+    .view-cms .cont .search_wrap {
+      margin: 30px 0; }
+    .view-cms .cont td {
+      height: 60px;
+      overflow: hidden; }
+      .view-cms .cont td img {
+        padding-top: 5px;
+        width: 60px; }
+      .view-cms .cont td .update {
+        margin-right: 10px;
+        cursor: pointer; }
+      .view-cms .cont td .delete {
+        margin-right: 10px;
+        cursor: pointer; }
+
+/*# sourceMappingURL=../tmp/vote-cms.css.map */

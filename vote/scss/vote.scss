@@ -16,6 +16,7 @@
 			position:relative;
 			float:left;
 			margin-right: 5px;
+			margin-top: 5px;
 			width:49%;
 			background-color: #f9f9f9;
 			box-sizing:border-box;
@@ -83,6 +84,61 @@
 		left:0;
 		width:100%;
 		text-align: center;
+	}
+	.vote-pop{
+		display: none;
+		position:fixed;
+		top:0;
+		left:0;
+		right:0;
+		bottom:0;
+		background-color:rgba(0,0,0,.5);
+		z-index: 99;
+		&.show{
+			display: block;
+		}
+		.vote-wrap{
+			position:absolute;
+			top:50%;
+			left:50%;
+			width:80%;
+			transform: translate(-50%,-50%);
+			-webkit-transform:translate(-50%,-50%);
+			background-color:#fff;
+			.img-wrap{
+				width:100%;
+				padding-top:100%;
+				img{
+					position: absolute;
+					top:0;
+					left:0;
+					width:100%;
+				}
+			}
+			.vote-title{
+				margin: 5px 0;
+				text-align:center;
+				//color:#fff;
+				font-size: 16px;
+			}
+			.vote-info{
+				margin: 5px 0;
+				padding:0 10px;
+				font-size: 12px;
+				box-sizing:border-box;
+				-webkit-box-sizing:border-box;
+				word-break:break-all;
+			}
+			.back-btn{
+				margin:10px auto;
+				width:50px;
+				height:20px;
+				line-height: 20px;
+				text-align:center;
+				border:1px solid #000;
+				font-size: 14px;
+			}
+		}
 	}
 }
 

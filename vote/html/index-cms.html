@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>投票后台管理</title>
+	<link rel="stylesheet" href="../css/base-cms.css">
+	<link rel="stylesheet" href="../css/vote-cms.css">
+	<script src="../js/base.js"></script>
+	<script src="../js/jquery.min.js"></script>
+	<script src="../js/vote-cms.js"></script>
+</head>
+<body>
+	<div class="view-cms">
+		<div class="head">后台投票管理系统</div>
+		<div class="cont">
+			<div class="vote_add_wrap">
+				<div class="dl in title">
+					<b>投票标题</b>
+					<div class="dd">
+						<div class="ip">
+							<input id="vote_title" class="vote_title ipt" placeholder="请输入投票标题" type="text" maxlength="10">
+							<div class="tip">
+								<div class="tip_box">
+									<p>不超过10字</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="dl in indexImage">
+					<b>封面图</b>
+					<div class="dd">
+						<input id="vote_img" class="vote_img" placeholder="请输入投票标题" type="file" maxlength="10">
+						<img src="javascript:;" alt="">
+					</div>
+				</div>
+				<div class="dl in info">
+					<b>投票内容</b>
+					<div class="dd">
+						<div class="ip">
+							<textarea class="ta vote_info" id="vote_info" placeholder="请输入参加投票比赛项目的简介"maxlength="50"></textarea>
+							<div class="tip">
+								<div class="tip_box">
+									<p>不超过50字</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="b add">新增</div>
+			</div>
+			<div class="vote_list">
+				<div class="search_wrap">
+					<div class="dl">
+						<div class="dd">
+							<div class="ip">
+								<input id="search_ipt" class="search_ipt ipt" placeholder="请输入商户ID查询所有投票项目" type="text">
+								<div class="b search">搜索</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<table class="tb vote_tb">
+					<thead>
+						<tr>
+							<td><span>商户ID</span></td>
+							<td><span>投票ID</span></td>
+							<td><span>投票标题</span></td>
+							<td><span>投票图片</span></td>
+							<td><span>投票内容</span></td>
+							<td><span>操作</span></td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr data-id="1">
+							<td>1</td>
+							<td>1</td>
+							<td>ddvdd</td>
+							<td>
+								<img src="../pic/ddvdd.jpg" alt="">
+							</td>
+							<td>ddvdd是真nb</td>
+							<td><span class="update">修改</span><span class="delete">删除</span></td>
+						</tr>
+						<tr  data-id="2">
+							<td>1</td>
+							<td>2</td>
+							<td>ddvdd</td>
+							<td>
+								<img src="../pic/ddvdd.jpg" alt="">
+							</td>
+							<td>ddvdd是真nb</td>
+							<td><span class="update">修改</span><span class="delete">删除</span></td>
+						</tr>
+						<tr  data-id="3">
+							<td>1</td>
+							<td>3</td>
+							<td>ddvdd</td>
+							<td>
+								<img src="../pic/ddvdd.jpg" alt="">
+							</td>
+							<td>ddvdd是真nb</td>
+							<td><span class="update">修改</span><span class="delete">删除</span></td>
+						</tr>
+						<tr  data-id="4">
+							<td>1</td>
+							<td>4</td>
+							<td>ddvdd</td>
+							<td>
+								<img src="../pic/ddvdd.jpg" alt="">
+							</td>
+							<td>ddvdd是真nb</td>
+							<td><span class="update">修改</span><span class="delete">删除</span></td>
+						</tr>
+						<tr  data-id="5">
+							<td>1</td>
+							<td>5</td>
+							<td>ddvdd</td>
+							<td>
+								<img src="../pic/ddvdd.jpg" alt="">
+							</td>
+							<td>ddvdd是真nb</td>
+							<td><span class="update">修改</span><span class="delete">删除</span></td>
+						</tr>
+					</tbody>
+				</table>	
+			</div>
+		</div>
+	</div>
+</body>
+</html>
