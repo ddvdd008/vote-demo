@@ -13,16 +13,27 @@ $(function(){
 			//初始化
 			var me = this;
 			//获取和加载投票组数据
-			
 			//绑定事件
 			me.bindHandEvent();
 		},
 		//把页面数据保存在对象里
-		saveVoteData:function(obj){
+		saveVoteData:function(){
 			var me =this;
-			obj.title = $('.title .ipt').val();
-			obj.imgUrl = $('.indexImage img').attr('src');
-			obj.desc = $('.vote_info').val();
+			var obj = {};
+			obj.business_id = $('.view-cms .business_id .ipt').val();
+			obj.vote_name = $('.view-cms .title .ipt').val();
+			obj.img_url = $('.view-cms .indexImage img').attr('src');
+			obj.vote_content = $('.view-cms .vote_info').val();
+			return obj;
+		},
+		saveUpdateVoteData:function(){
+			var me =this;
+			var obj = {};
+			obj.business_id = $('.view-pop .business_id .ipt').val();
+			obj.vote_id = $('.view-pop .update_cont_wrap').data("id");
+			obj.vote_name = $('.view-pop .title .ipt').val();
+			obj.img_url = $('.view-pop .indexImage img').attr('src');
+			obj.vote_content = $('.view-pop .vote_info').val();
 			return obj;
 		},
 		loadVotesDom:function(data){
@@ -42,7 +53,7 @@ $(function(){
 				    var l = data.length;
 				    if(l>0){
 				    	for(var i=0;i<l;i++){
-							<tr data-id="+data[i].vote_id+">
+							<tr data-businessid="+data[i].business_id+" data-id="+data[i].vote_id+">
 								<td>+data[i].business_id+</td>
 								<td>+data[i].vote_id+</td>
 								<td>+data[i].vote_name+</td>
@@ -57,10 +68,143 @@ $(function(){
 				</tbody>
 			*/},data);
 			$(".vote_tb").html(html);
+			//修改
+			$(".vote_tb .update").on("click",function(){
+				var $parent= $(this).parents('tr');
+				var id = $parent.data("id");
+				me.getVoteFun(id);
+			});
+			//删除
+			$(".vote_tb .delete").on("click",function(){
+				var $parent= $(this).parents('tr');
+				var id = $parent.data("id");
+				var businessid = $parent.data("businessid");
+				_.ui.pop.confirm("确认删除吗？",function(){
+					me.deleteVoteFun(id,businessid);
+				});
+			});
 		},
-		loadPopPage:function(){
-
-		};
+		loadPopPage:function(obj){
+			var me = this;
+			var html = htm(function(data){/*
+				<div class="update_cont_wrap" data-id="+data.vote_id+">
+					<div class="dl in business_id">
+						<b>商户ID</b>
+						<div class="dd">
+							<div class="ip">
+								<input id="business_id" class="business_id ipt" value="+data.business_id+" disabled="disabled" type="text" maxlength="10">
+								<div class="tip">
+									<div class="tip_box">
+										<p>不超过10字，同一项目的投票项目 商户ID录入一致</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="dl in title">
+						<b>投票标题</b>
+						<div class="dd">
+							<div class="ip">
+								<input id="vote_title" class="vote_title ipt" value="+data.vote_name+" placeholder="请输入投票标题" type="text" maxlength="10">
+								<div class="tip">
+									<div class="tip_box">
+										<p>不超过10字</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="dl in indexImage">
+						<b>封面图</b>
+						<div class="dd">
+							<div class="update_wrap have_img">
+								<input id="vote_img" class="vote_img" type="file">
+								<div class="img_wrap show">
+									<img src="+data.img_url+" alt="">
+									<span class="update_img">更改图片</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="dl in info">
+						<b>投票内容</b>
+						<div class="dd">
+							<div class="ip">
+								<textarea class="ta vote_info" id="vote_info"  placeholder="请输入参加投票比赛项目的简介"maxlength="50">+data.vote_content+</textarea>
+								<div class="tip">
+									<div class="tip_box">
+										<p>不超过50字</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="btn">
+						<div class="b update">修改</div>
+						<div class="b cancel">取消</div>
+					</div>
+				</div>
+			*/},obj);
+			$(".view-pop").html(html);
+			$(".view-pop").addClass('show');
+			$(".view-pop .vote_img").change(function(){
+				var file = $(".view-pop .indexImage").find('.vote_img')[0].files[0];
+				me.uploadImgFun(file,1);
+			});
+			//update img
+			$(".view-pop .update_img").on("click",function(){
+				$(".view-pop .vote_img").click();
+			});
+			$(".view-pop .update").on("click",function(){
+				var obj = {};
+				obj = me.saveUpdateVoteData();
+				if(!me.checkVoteAddData(obj)) return;
+				me.updateVoteFun(obj);
+			});
+			$(".view-pop .cancel").on("click",function(){
+				$(".view-pop").removeClass('show');
+			});
+		},
+		uploadImgFun:function(file,type){
+			var me = this;
+			var url = '/imgs/imgAdd/';
+			var formData = new FormData();
+			formData.append("img_file",file);
+			$.ajax({
+				url:url,
+				data:formData,
+				//dataType:'json',
+				type:'POST',
+				contentType:false,
+				processData:false,
+				success:function(data){
+					if(type==0){
+						me.setMainImgFun(data);
+					}
+					else{
+						me.setSubImgFun(data);
+					}
+				},
+				error:function(xhr,type){
+					_.ui.pop.fail(xhr.statusText);
+					skip = false;
+					console.log(xhr);
+				},
+				complete:function(){
+					console.log("图片正在裁剪...");
+				}
+			});
+		},
+		setMainImgFun:function(url){
+			$(".view-cms .indexImage .img_wrap").addClass('show');
+			$(".view-cms .indexImage .img_wrap").find("img").attr("src",url);
+			$(".view-cms .indexImage .update_wrap").addClass('have_img');
+		},
+		setSubImgFun:function(url){
+			$(".view-pop .indexImage .img_wrap").addClass('show');
+			$(".view-pop .indexImage .img_wrap").find("img").attr("src",url);
+			$(".view-pop .indexImage .update_wrap").addClass('have_img');
+		},
 		checkVoteAddData:function(obj){
 			//console.log(obj)
 			var checks = {
@@ -98,281 +242,180 @@ $(function(){
 			}
 			return false;
 		},
+		//新建方法
+		addVoteFun:function(obj){
+			var me = this;
+			var obj = obj || {};
+			var url = '/votes/voteAdd/';
+			var dataParam = obj;
+			//post
+			$.ajax({
+				url:url,
+				data:dataParam,
+				dataType:'json',
+				type:'POST',
+				success:function(data){
+					if(data.error_no=="0"){
+						_.ui.pop.done(data.error_info);
+					}
+					else{
+						_.ui.pop.fail(data.error_info);
+					}
+				},
+				error:function(xhr,type){
+					console.log(xhr);
+				},
+				complete:function(){
+					console.log("投票项目正在新建...");
+				}
+			});
+		},
+		//查询方法
+		searchVotesFun:function(id){
+			var me = this;
+			var id = id || "";
+			var url = '/votes/business/';
+			var dataParam = {
+				"business_id" :id 
+			};
+			//post
+			$.ajax({
+				url:url,
+				data:dataParam,
+				type:'POST',
+				success:function(data){
+					if(data.error_no=="0" && data.resultList){
+						me.votesArray = data.resultList;
+						me.loadVotesDom(me.votesArray);
+					}
+					else{
+						$(".vote_tb").html("");
+						console.log(data.error_info);
+					}
+				},
+				error:function(xhr,type){
+					console.log(xhr);
+				},
+				complete:function(){
+					console.log("投票对象信息正在获取...");
+				}
+			});
+		},
+		//获取单个vote方法
+		getVoteFun:function(id){
+			var me = this;
+			var id = id || "";
+			var url = '/votes/voteGet/';
+			var dataParam = {
+				"vote_id":id
+			};
+			//post
+			$.ajax({
+				url:url,
+				data:dataParam,
+				dataType:'json',
+				type:'POST',
+				success:function(data){
+					if(data.error_no="0" && data.resultMap){
+						me.voteObj = data.resultMap;
+						me.loadPopPage(me.voteObj);
+					}
+					else{
+						_.ui.pop.fail(data.error_info);
+					}
+				},
+				error:function(xhr,type){
+					console.log(xhr);
+				},
+				complete:function(){
+					console.log("投票项目正在获取...");
+				}
+			});
+		},
+		//修改方法
+		updateVoteFun:function(obj){
+			var me = this;
+			var obj = obj || {};
+			var url = '/votes/voteUpdate/';
+			var dataParam = obj;
+			//post
+			$.ajax({
+				url:url,
+				data:dataParam,
+				dataType:'json',
+				type:'POST',
+				success:function(data){
+					if(data.error_no=="0"){
+						_.ui.pop.done(data.error_info);
+					}
+					else{
+						_.ui.pop.fail(data.error_info);
+					}
+				},
+				error:function(xhr,type){
+					console.log(xhr);
+				},
+				complete:function(){
+					console.log("投票项目正在新建...");
+				}
+			});
+		},
+		//删除方法
+		deleteVoteFun:function(id,businessid){
+			var me = this;
+			var id = id || "";
+			var businessid = businessid || "";
+			var url = '/votes/voteDelete/';
+			var dataParam = {
+				"vote_id":id
+			};
+			//post
+			$.ajax({
+				url:url,
+				data:dataParam,
+				dataType:'json',
+				type:'POST',
+				success:function(data){
+					if(data.error_no=="0"){
+						_.ui.pop.done(data.error_info);
+						me.searchVotesFun(businessid);
+					}
+					else{
+						_.ui.pop.fail(data.error_info);
+					}
+				},
+				error:function(xhr,type){
+					console.log(xhr);
+				},
+				complete:function(){
+					console.log("投票项目正在删除...");
+				}
+			});
+		},
 		bindHandEvent:function(){
 			var me = this;
+			//upload img
+			$(".view-cms .vote_img").change(function(){
+				var file = $(".view-cms .indexImage").find('.vote_img')[0].files[0];
+				me.uploadImgFun(file,0);
+			});
+			//update img
+			$(".view-cms .update_img").on("click",function(){
+				$(".view-cms .vote_img").click();
+			});
 			//新建
 			$(".view-cms .add").on("click",function(){
 				var obj = {};
-				if(!me.checkVoteAddData(me.saveVoteData(obj))) return;
-
-				var url = '/votes/voteAdd/';
-				var dataParam = me.saveVoteData(obj);
-				//post
-				$.ajax({
-					url:url,
-					data:dataParam,
-					dataType:'json',
-					type:'POST',
-					success:function(data){
-						_.ui.pop.fail(data.error_info);
-					},
-					error:function(xhr,type){
-						console.log(xhr);
-					},
-					complete:function(){
-						console.log("投票项目正在新建...");
-					}
-				});
+				obj = me.saveVoteData();
+				if(!me.checkVoteAddData(obj)) return;
+				me.addVoteFun(obj);
 			});
 			//查询
 			$(".search_wrap .search").on("click",function(){
-				var me = this;
 				var id = $(".search_ipt").val();
-				var url = 'http://10.8.135.104:3088/votes/business/10000';
-				var dataParam = {
-					"business_id" :id 
-				};
-				//post
-				$.ajax({
-					url:url,
-					//dataParam:dataParam,
-					type:'POST',
-					success:function(data){
-						if(data.error_no=="0" && data.resultList){
-							me.votesArray = data.resultList;
-							me.loadVotesDom(me.votesArray);
-						}
-						else{
-							console.log(data.error_info);
-						}
-					},
-					error:function(xhr,type){
-						console.log(xhr);
-					},
-					complete:function(){
-						console.log("投票对象信息正在获取...");
-					}
-				});
-			});
-			//修改
-			$(".vote_tb .update").on("click",function(){
-				var me = this;
-				var $parent= $(this).parents('tr');
-				var id = $parent.data("id");
-				
-				var url = '/votes/voteUpdate/';
-				var dataParam = {
-					"vote_id":id
-				};
-				//post
-				$.ajax({
-					url:url,
-					data:dataParam,
-					dataType:'json',
-					type:'POST',
-					success:function(data){
-						if(data.error_info="0" && data.resultMap){
-							me.voteObj = data.resultMap;
-							me.loadPopPage(me.voteObj);
-						}
-						else{
-							_.ui.pop.fail(data.error_info);
-						}
-					},
-					error:function(xhr,type){
-						console.log(xhr);
-					},
-					complete:function(){
-						console.log("投票项目正在删除...");
-					}
-				});
-			});
-			//删除
-			$(".vote_tb .delete").on("click",function(){
-				var me = this;
-				_.ui.pop.confirm("确认删除吗？",function(){
-					var $parent= $(this).parents('tr');
-					var id = $parent.data("id");
-					
-					var url = '/votes/voteDelete/';
-					var dataParam = {
-						"vote_id":id
-					};
-					//post
-					$.ajax({
-						url:url,
-						data:dataParam,
-						dataType:'json',
-						type:'POST',
-						success:function(data){
-							_.ui.pop.fail(data.error_info);
-						},
-						error:function(xhr,type){
-							console.log(xhr);
-						},
-						complete:function(){
-							console.log("投票项目正在删除...");
-						}
-					});
-				});
+				me.searchVotesFun(id);
 			});
 		}
 	};
-	_.ns("_.ui.pop.votePop",function(){
-
-		var _=this;
-		
-		var view=null;
-		
-		var init;
-		var option;
-		var imgIpt,imgData={};
-		var imgJcrop;
-		
-		this.title='修改投票信息'; 
-		
-		this.getView = function(){
-			if(!view){
-				view=_.view();
-				init=_.item({
-				title:true,
-				content: function(){/*
-					<div class="vote_update_wrap">
-						<div class="dl in businessId">
-							<b>商户ID</b>
-							<div class="dd">
-								<div class="ip">
-									<input id="vote_title" disabled="disabled" class="vote_title ipt" placeholder="请输入投票标题" type="text" maxlength="10">
-									<div class="tip">
-										<div class="tip_box">
-											<p>不超过10字</p>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="dl in title">
-							<b>投票标题</b>
-							<div class="dd">
-								<div class="ip">
-									<input id="vote_title" class="vote_title ipt" placeholder="请输入投票标题" type="text" maxlength="10">
-									<div class="tip">
-										<div class="tip_box">
-											<p>不超过10字</p>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="dl in indexImage">
-							<b>封面图</b>
-							<div class="dd">
-								<input id="vote_img" class="vote_img" placeholder="请输入投票标题" type="file" maxlength="10">
-								<img src="javascript:;" alt="">
-							</div>
-						</div>
-						<div class="dl in info">
-							<b>投票内容</b>
-							<div class="dd">
-								<div class="ip">
-									<textarea class="ta vote_info" id="vote_info" placeholder="请输入参加投票比赛项目的简介"maxlength="50"></textarea>
-									<div class="tip">
-										<div class="tip_box">
-											<p>不超过50字</p>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="b add">新增</div>
-					</div>
-				*/},
-				save:'上传',
-				cancle:'取消'
-				});
-				view.append(init);
-			}
-			return view;
-		};
-
-		this.css(function(){/*
-			.jcrop-holder{direction:ltr;text-align:left;}
-			.jcrop-vline,.jcrop-hline{background:#FFF url(../pic/Jcrop.gif);font-size:0;position:absolute;}
-			.jcrop-vline{height:100%;width:1px!important;}
-			.jcrop-vline.right{right:0;}
-			.jcrop-hline{height:1px!important;width:100%;}
-			.jcrop-hline.bottom{bottom:0;}
-			.jcrop-tracker{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;-webkit-user-select:none;height:100%;width:100%;}
-			.jcrop-handle{background-color:#333;border:1px #EEE solid;font-size:1px;height:7px;width:7px;}
-			.jcrop-handle.ord-n{left:50%;margin-left:-4px;margin-top:-4px;top:0;}
-			.jcrop-handle.ord-s{bottom:0;left:50%;margin-bottom:-4px;margin-left:-4px;}
-			.jcrop-handle.ord-e{margin-right:-4px;margin-top:-4px;right:0;top:50%;}
-			.jcrop-handle.ord-w{left:0;margin-left:-4px;margin-top:-4px;top:50%;}
-			.jcrop-handle.ord-nw{left:0;margin-left:-4px;margin-top:-4px;top:0;}
-			.jcrop-handle.ord-ne{margin-right:-4px;margin-top:-4px;right:0;top:0;}
-			.jcrop-handle.ord-se{bottom:0;margin-bottom:-4px;margin-right:-4px;right:0;}
-			.jcrop-handle.ord-sw{bottom:0;left:0;margin-bottom:-4px;margin-left:-4px;}
-			.jcrop-dragbar.ord-n,.jcrop-dragbar.ord-s{height:7px;width:100%;}
-			.jcrop-dragbar.ord-e,.jcrop-dragbar.ord-w{height:100%;width:7px;}
-			.jcrop-dragbar.ord-n{margin-top:-4px;}
-			.jcrop-dragbar.ord-s{bottom:0;margin-bottom:-4px;}
-			.jcrop-dragbar.ord-e{margin-right:-4px;right:0;}
-			.jcrop-dragbar.ord-w{margin-left:-4px;}
-			.jcrop-light .jcrop-vline,.jcrop-light .jcrop-hline{background:#FFF;filter:alpha(opacity=70)!important;opacity:.70!important;}
-			.jcrop-light .jcrop-handle{-moz-border-radius:3px;-webkit-border-radius:3px;background-color:#000;border-color:#FFF;border-radius:3px;}
-			.jcrop-dark .jcrop-vline,.jcrop-dark .jcrop-hline{background:#000;filter:alpha(opacity=70)!important;opacity:.7!important;}
-			.jcrop-dark .jcrop-handle{-moz-border-radius:3px;-webkit-border-radius:3px;background-color:#FFF;border-color:#000;border-radius:3px;}
-			.solid-line .jcrop-vline,.solid-line .jcrop-hline{background:#FFF;}
-			.jcrop-holder img,img.jcrop-preview{max-width:none;}
-		*/});
-
-		this.load = function(){
-			var img = view.find("#upload_img");
-			img.attr("src",option.url);
-			if(imgJcrop){
-				imgJcrop.destroy();
-			}
-			skip = false;
-			view.find("#upload_img").css({
-				'width':option.orgImgWidth+'px',
-				'height':option.orgImgHeight+'px'
-			});
-			imgJcrop = $.Jcrop('#upload_img',{
-				aspectRatio:option.aspectRatio,
-				boxWidth:300,
-				boxHeight:Math.round(300/option.radio),
-				minSize:[option.limiteWidth,option.limiteHeight],
-				setSelect:[0,0,option.orgImgWidth,option.orgImgHeight],
-				onChange:function(e){
-					$(".jcrop-keymgr").css("opacity",0);
-					imgData.imgFile = imgIpt[0].files[0];
-					imgData.cut_x1 = Math.round(e.x);
-					imgData.cut_y1 = Math.round(e.y);
-					imgData.cut_width = Math.round(e.w);
-					imgData.cut_height = Math.round(e.h);
-				}
-			});
-		};
-		
-		this.active=function(data,file){
-			option = data;
-			imgIpt = file;
-			_.show();
-		}
-		
-		this.save = function(){
-			imgIpt.val("");
-			if(!skip){
-				_cutUploadImg(option,imgData);
-				skip = true;
-			}
-		};
-
-		this.cancle = function(){
-			imgIpt.val("");
-			_.hide();
-		};
-
-	});
 	voteCmsSystem.init();
 });
