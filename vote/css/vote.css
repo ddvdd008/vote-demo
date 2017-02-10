@@ -1,72 +1,135 @@
 .vote-view {
-  padding: 20px; }
+  padding-bottom: 10px;
+  background-size: 100%;
+  background: url("../bg.png") repeat;
+  background-size: 100%; }
   .vote-view .head {
-    width: 100%;
-    text-align: center; }
-  .vote-view .cont:after {
-    content: "";
-    display: block;
-    width: 0;
-    height: 0;
-    clear: both; }
-  .vote-view .cont .block {
     position: relative;
-    float: left;
-    margin-right: 5px;
-    width: 49%;
-    background-color: #f9f9f9;
+    padding-top: 57.86%;
+    width: 100%;
+    overflow: hidden; }
+    .vote-view .head img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%; }
+  .vote-view .cont {
+    padding: 7%;
     box-sizing: border-box;
     -webkit-box-sizing: border-box; }
-    .vote-view .cont .block:nth-child(2n) {
-      margin-right: 0; }
-    .vote-view .cont .block .img-wrap {
-      padding-top: 100%; }
-      .vote-view .cont .block .img-wrap img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%; }
-    .vote-view .cont .block .title {
-      margin: 5px 0;
-      text-align: center; }
-    .vote-view .cont .block .info {
-      display: -webkit-box;
-      padding: 0 10px;
-      font-size: 12px;
-      box-sizing: border-box;
-      -webkit-box-sizing: border-box;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      word-break: break-all; }
-    .vote-view .cont .block .vote-wrap {
+    .vote-view .cont:after {
+      content: "";
+      display: block;
+      width: 0;
+      height: 0;
+      clear: both; }
+    .vote-view .cont .block {
       position: relative;
-      margin: 5px 0; }
-      .vote-view .cont .block .vote-wrap:after {
-        content: "";
-        display: block;
-        width: 0;
-        height: 0;
-        clear: both; }
-      .vote-view .cont .block .vote-wrap .vote {
+      float: left;
+      width: 40.3%;
+      box-sizing: border-box;
+      -webkit-box-sizing: border-box; }
+      .vote-view .cont .block:nth-child(2n) {
+        float: right;
+        margin-right: 0; }
+      .vote-view .cont .block .img-wrap {
         position: relative;
-        float: left;
-        width: 50%;
-        background-color: #f9f9f9;
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box; }
-      .vote-view .cont .block .vote-wrap .vote-num {
-        padding-left: 10px;
-        color: red; }
-      .vote-view .cont .block .vote-wrap .vote-btn {
+        padding-top: 74.5%;
+        overflow: hidden; }
+        .vote-view .cont .block .img-wrap img {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%; }
+      .vote-view .cont .block .title {
+        font-size: 12px;
+        margin: 5px 0;
         text-align: center;
-        border: 1px solid #000; }
+        color: #fff; }
+      .vote-view .cont .block .vote-wrap {
+        position: relative;
+        height: 20px;
+        margin: 10px 0;
+        padding: 0 5px;
+        overflow: hidden; }
+        .vote-view .cont .block .vote-wrap:after {
+          content: "";
+          display: block;
+          width: 0;
+          height: 0;
+          clear: both; }
+        .vote-view .cont .block .vote-wrap .vote {
+          position: relative;
+          float: left;
+          box-sizing: border-box;
+          -webkit-box-sizing: border-box; }
+        .vote-view .cont .block .vote-wrap .vote-num {
+          float: left;
+          font-size: 12px;
+          color: #fff; }
+        .vote-view .cont .block .vote-wrap .vote-btn {
+          float: right;
+          width: 35px;
+          height: 18px;
+          background: url("../pic/vote-btn.png") no-repeat;
+          background-size: 100%; }
+      .vote-view .cont .block .idx {
+        position: absolute;
+        top: 22px;
+        left: -15px;
+        color: #e5dddb;
+        font-size: 16px; }
   .vote-view .footer {
-    position: absolute;
-    bottom: 20px;
+    position: relative;
+    text-align: center;
+    color: #e0e1e3; }
+  .vote-view .vote-pop {
+    display: none;
+    position: fixed;
+    top: 0;
     left: 0;
-    width: 100%;
-    text-align: center; }
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 99; }
+    .vote-view .vote-pop.show {
+      display: block; }
+    .vote-view .vote-pop .vote-wrap {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 80%;
+      transform: translate(-50%, -50%);
+      -webkit-transform: translate(-50%, -50%);
+      background-color: rgba(0, 0, 0, 0.5);
+      border: 2px solid #adadad; }
+      .vote-view .vote-pop .vote-wrap .img-wrap {
+        width: 100%;
+        padding-top: 74.5%; }
+        .vote-view .vote-pop .vote-wrap .img-wrap img {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%; }
+      .vote-view .vote-pop .vote-wrap .vote-title {
+        margin: 10px 0;
+        text-align: center;
+        color: #d5d5d5;
+        font-size: 18px; }
+      .vote-view .vote-pop .vote-wrap .back-btn {
+        position: relative;
+        margin: 10px auto;
+        width: 30%;
+        overflow: hidden; }
+        .vote-view .vote-pop .vote-wrap .back-btn:before {
+          content: "";
+          display: block;
+          width: 100%;
+          padding-top: 37.4%; }
+        .vote-view .vote-pop .vote-wrap .back-btn img {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%; }
 
 /*# sourceMappingURL=../tmp/vote.css.map */

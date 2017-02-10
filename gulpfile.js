@@ -208,5 +208,21 @@ gulp.task('build', [
 ]);
 
 
-
+/* 本地地址联调跨域数据 */
+//proxy
+gulp.task('proxy', function() {
+    //proxy
+    var bs = require('browser-sync').create();
+    bs.init({
+        open: false,
+        port: 3088,
+        proxy: {
+            target: "http://139.129.47.102:8090/",
+            middleware: function(req, res, next) {
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                next();
+            }
+        }
+    });
+});
 

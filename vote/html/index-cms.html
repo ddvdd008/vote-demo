@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>投票后台管理</title>
+	<link rel="stylesheet" href="../css/base-cms.css">
+	<link rel="stylesheet" href="../css/vote-cms.css">
+	<script src="../js/base.js"></script>
+	<script src="../js/jquery.min.js"></script>
+	<script src="../js/vote-cms.js"></script>
+</head>
+<body>
+	<div class="view-cms">
+		<div class="head">后台投票管理系统</div>
+		<div class="cont">
+			<div class="vote_add_wrap">
+				<div class="dl in business_id">
+					<b>商户ID</b>
+					<div class="dd">
+						<div class="ip">
+							<input id="business_id" class="business_id ipt" placeholder="请输入商户ID" type="text" maxlength="10">
+							<div class="tip">
+								<div class="tip_box">
+									<p>不超过10字，同一项目的投票项目 商户ID录入一致</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="dl in title">
+					<b>投票标题</b>
+					<div class="dd">
+						<div class="ip">
+							<input id="vote_title" class="vote_title ipt" placeholder="请输入投票标题" type="text" maxlength="10">
+							<div class="tip">
+								<div class="tip_box">
+									<p>不超过10字</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="dl in indexImage">
+					<b>封面图</b>
+					<div class="dd">
+						<div class="update_wrap">
+							<input id="vote_img" class="vote_img" type="file">
+							<div class="img_wrap">
+								<img src="javascript:;" alt="">
+								<span class="update_img">更改图片</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="dl in info">
+					<b>投票内容</b>
+					<div class="dd">
+						<div class="ip">
+							<textarea class="ta vote_info" id="vote_info" placeholder="请输入参加投票比赛项目的简介"maxlength="50"></textarea>
+							<div class="tip">
+								<div class="tip_box">
+									<p>不超过50字</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="b add">新增</div>
+			</div>
+			<div class="vote_list">
+				<div class="search_wrap">
+					<div class="dl">
+						<div class="dd">
+							<div class="ip">
+								<input id="search_ipt" class="search_ipt ipt" placeholder="请输入商户ID查询所有投票项目" type="text">
+								<div class="b search">搜索</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<table class="tb vote_tb">
+				</table>	
+			</div>
+		</div>
+	</div>
+	<div class="view-pop">
+	</div>
+</body>
+</html>
